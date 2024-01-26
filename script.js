@@ -14,6 +14,10 @@ let setIntervalId;
 let gameOver = false;
 let snakeBody = [];
 
+// Buttons Controls 
+let controlsBtns = document.querySelectorAll(".control")
+
+
 // Sounds Effect
 const eatFoodsound = new Audio("mixkit-arrow-whoosh-1491.wav")
 const gameOversound = new Audio("mixkit-arcade-fast-game-over-233.wav")
@@ -30,24 +34,24 @@ const foodPositionChange = () => {
 
 // Start The Game 
 const startGame = () => {
-    
+
     if (gameOver) return gameOverHandler();
     gameBoard.innerHTML = `<div class="food" style="grid-area:${foodY}/${foodX}"></div>`
 
-    for(let j = snakeBody.length - 1; j > 0 ; j--){
-        snakeBody[j] = snakeBody[j-1];
-      
+    for (let j = snakeBody.length - 1; j > 0; j--) {
+        snakeBody[j] = snakeBody[j - 1];
+
     }
 
     snakeX += dirX;
     snakeY += dirY;
 
-    snakeBody[0] = [snakeX,snakeY] ;
+    snakeBody[0] = [snakeX, snakeY];
 
-    for(let i = 0; i < snakeBody.length; i++){
+    for (let i = 0; i < snakeBody.length; i++) {
         gameBoard.innerHTML += `<div class="snake" style="grid-area:${snakeBody[i][1]}/${snakeBody[i][0]};"></div>`
 
-        if(i != 0 && snakeX === snakeBody[i][0] && snakeY === snakeBody[i][1]){
+        if (i != 0 && snakeX === snakeBody[i][0] && snakeY === snakeBody[i][1]) {
             gameOver = true;
         }
     }
@@ -59,8 +63,31 @@ const startGame = () => {
     eatFood();
 }
 
+// Snake Move Controls Buttons 
+controlsBtns.forEach((control, index) => {
+    control.addEventListener("click", () => {
+        if (index == 0 && dirY != 1) {
+            dirY = -1
+            dirX = 0
+        }
+        else if (index == 1 && dirX != 1) {
+            dirY = 0
+            dirX = -1
+        }
+        else if (index == 2 && dirX != -1) {
+            dirY = 0
+            dirX = 1
+        }
+        else if (index == 3 && dirY != -1) {
+            dirY = 1
+            dirX = 0
+        }
+    })
+})
+
 // Snake Move Function 
 const moveSnake = (e) => {
+
     if (e.key === "ArrowUp" && dirY != 1) {
         dirY = -1
         dirX = 0
@@ -78,18 +105,18 @@ const moveSnake = (e) => {
     startGame();
 }
 
-const eatFood = ()=>{
-    if(snakeX === foodX && snakeY === foodY){
+const eatFood = () => {
+    if (snakeX === foodX && snakeY === foodY) {
         foodPositionChange();
         score++;
-        highScore = score >= highScore ? score: highScore;
-        localStorage.setItem("high-score",highScore);
+        highScore = score >= highScore ? score : highScore;
+        localStorage.setItem("high-score", highScore);
         scoreBoard.innerHTML = `Score: ${score}`;
         hScoreBoard.innerHTML = `High-Score ${highScore}`;
         eatFoodsound.load();
         eatFoodsound.play();
-        snakeBody.push([foodX,foodY])
-        
+        snakeBody.push([foodX, foodY])
+
     }
 }
 
@@ -100,7 +127,7 @@ const gameOverHandler = () => {
     alert("Game Over");
     location.reload();
     clearInterval(setIntervalId);
-   
+
 }
 
 
