@@ -69,6 +69,7 @@ body {
     display: flex;
     height: 33%;
 }
-.left-right button{
-   height: 100%;
+
+.left-right button {
+    height: 100%;
 }
